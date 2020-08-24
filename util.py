@@ -1,10 +1,8 @@
-from __future__ import print_function
 import torch
 import time
 import numpy as np
 from PIL import Image
 import os
-from .transform import Relabel, ToLabel, Colorize
 from torchvision.transforms import ToPILImage
 import cv2
 
@@ -85,13 +83,8 @@ class SaveResults:
             img_path = os.path.join(self.img_dir, 'epoch%.3d_%s.png' % (epoch, label))
             if image is None:
                 continue
-            if 'label' in label:
-                image = image[0].byte().cpu().data
-                image_numpy = Colorize()(image.unsqueeze(0))
-                image = ToPILImage()(image_numpy)
-                image.save(img_path)
-            elif 'img' not in label:                
-                if self.dataset in ['kitti', 'cityscapes', 'nyuv2']:
+            if 'img' not in label:                
+                if self.dataset in ['kitti']:
                     
                     if image.max() <= 1:
                         scale = 1
