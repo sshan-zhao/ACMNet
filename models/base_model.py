@@ -37,15 +37,15 @@ class BaseModel():
     def setup(self, opt, parser=None):
         if self.isTrain:
             self.schedulers = [networks.get_scheduler(optimizer, opt) for optimizer in self.optimizers]
-        if opt.continue_train:
-            self.load_networks(opt.which_epoch)
         if not self.isTrain:
             if opt.model_path != '':
-                self.loda_model(opt.model_path)
+                self.load_model(opt.model_path)
             elif opt.which_epoch != '':
                 self.load_networks(opt.which_epoch)
             else:
                 pass
+        elif opt.continue_train:
+            self.load_networks(opt.which_epoch)
 
     # make models eval mode during test time
     def eval(self):
@@ -155,10 +155,8 @@ class BaseModel():
             
     # print network information
     def print_networks(self, verbose=False):
-        print('---------- Networks initialized -------------')
         for name in self.model_names:
             if isinstance(name, str):
                 net = getattr(self, 'net' + name)
                 if verbose:
                     print(net)
-        print('-----------------------------------------------')

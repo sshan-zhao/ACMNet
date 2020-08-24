@@ -100,7 +100,6 @@ class KittiDataset(data.Dataset):
             H = 352 
             s = int(round(w - 1216) / 2)  
             img = img[h-H:, s:s+1216]
-            img_o = img_o[h-H:, s:s+1216]
             gt = gt[h-H:, s:s+1216]
             sparse = sparse[h-H:, s:s+1216]
             if self.phase == 'train':
@@ -115,7 +114,7 @@ class KittiDataset(data.Dataset):
         img, gt, sparse, K = self.read_data(index)
 
         if self.joint_transform is not None:
-            img, gt, sparse, flip  = self.joint_transform((img, gt, sparse, 'kitti'))
+            img, gt, sparse  = self.joint_transform((img, gt, sparse, 'kitti'))
         data = {}
         data['img'] = img
         data['gt'] = gt 

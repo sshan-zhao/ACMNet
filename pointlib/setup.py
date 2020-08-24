@@ -10,8 +10,6 @@ setup(
             'src/bindings.cpp',
             'src/knn_points.cpp',
             'src/knn_points_gpu.cu',
-            'src/valid_idx.cpp',
-            'src/valid_idx_gpu.cu',
             'src/sampling.cpp',
             'src/sampling_gpu.cu',
             'src/group_points.cpp',

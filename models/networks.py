@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.nn import init, Parameter
 import torch.nn.functional as F
 from torch.nn import DataParallel
-from point_utils import knn_operation, valid_index, gather_operation, grouping_operation
+from point_utils import knn_operation, gather_operation, grouping_operation
 import numpy as np
 ###############################################################################
 # Helper Functions
@@ -61,9 +61,8 @@ def gen_3dpoints(depth, K, levels=3, knn=[9], nsamples=[10000]):
         num_sam = nsamples[i-1]          
         for j in range(n):
             
-            all_idx = torch.arange(mask.shape[2]*mask.shape[3]).reshape(1, -1)
-            v_idx1 = all_idx[mask[j].reshape(1, -1)>0].reshape(1,-1)
-            v_idx = valid_index(mask[j], mask[j].sum()) #(1,nv)
+            all_idx = torch.arange(mask.shape[2]*mask.shape[3]).reshape(1, -1).cuda().int()
+            v_idx = all_idx[mask[j].reshape(1, -1)>0].reshape(1,-1)
             sample = torch.randperm(mask[j].sum())
             
             if vp_num < num_sam:
@@ -80,7 +79,7 @@ def gen_3dpoints(depth, K, levels=3, knn=[9], nsamples=[10000]):
         
         # gather and 3d points
         xyd = torch.cat((xx, yy, depth), 1).view(n, 3, -1)
-        s_pts = gather_operation(xyd, s_idx).permute(0, 2, 1) #(n,ns,3)
+        s_pts = gather_operation(xyd, s_idx).permute(0, 2, 1) 
         cxy = torch.zeros(n,1,3).float().to(depth.get_device())
         fxy = torch.ones(n,1,3).float().to(depth.get_device())
         cxy[:,0,0] = K[:,0,2]
@@ -91,13 +90,12 @@ def gen_3dpoints(depth, K, levels=3, knn=[9], nsamples=[10000]):
         s_p3d[:,:,0:2] = s_p3d[:,:,0:2] * s_pts[:,:,2:]
 
         # knn
-        nnidx = knn_operation(s_p3d, s_p3d, knn[i-1])#.view(n, -1, knn[i-1]) #(n,ns,k)
+        nnidx = knn_operation(s_p3d, s_p3d, knn[i-1])
 
         spoints.append(s_p3d.permute(0, 2, 1))
         sidxs.append(s_idx)
         nnidxs.append(nnidx)
         new_mask = new_mask.view(n, 1, h//2**i, w//2**i)
-        #depth = depth * new_mask.float()
         masks.append(new_mask)
     
     return spoints, sidxs, nnidxs, masks
@@ -121,7 +119,6 @@ class CoAttnGPBlock(nn.Module):
     def __init__(self, in_channels=64, channels=64, knn=9, downsample=False):
         super(CoAttnGPBlock, self).__init__()
 
-        self.prop = prop
         if downsample:
             stride = 2
         else:

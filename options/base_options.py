@@ -13,20 +13,19 @@ class BaseOptions():
         parser.add_argument('--root', type=str, default='datasets', help='path to dataset')
         parser.add_argument('--dataset', type=str, default='kitti', help='dataset name')
         parser.add_argument('--test_data_file', type=str, default='val.list', help='validatation data list')
-        parser.add_argument('--batchSize', type=int, default=16, help='input batch size')
+        parser.add_argument('--batchSize', type=int, default=1, help='input batch size')
         parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
         parser.add_argument('--model', type=str, default='sd',
                             help='chooses which model to use, sd|...')
         parser.add_argument('--clip', action='store_true', help='clip the above part of the image')
-        parser.add_argument('--channels', type=int, default=64, help='channels')
+        parser.add_argument('--channels', type=int, default=32, help='channels')
         parser.add_argument('--scale', type=float, default=80, help='scale')
         parser.add_argument('--knn', nargs='+', type=int, default=6, help='number of nearest-neighbour')
         parser.add_argument('--nsamples', nargs='+', type=int, default=10000, help='sampling ratio')
         parser.add_argument('--nThreads', default=8, type=int, help='# threads for loading data')
-        parser.add_argument('--no_flip', action='store_true', help='if specified, do not flip the images for data augmentation')
-        parser.add_argument('--no_augment', action='store_true', help='if specified, do not use data augmentation, e.g., randomly shifting gamma')
         parser.add_argument('--init_type', type=str, default='kaiming', help='network initialization [normal|xavier|kaiming|orthogonal]')
         parser.add_argument('--init_gain', type=float, default=0.02, help='scaling factor for normal, xavier and orthogonal.')
+        parser.add_argument('--checkpoints_dir', type=str, default='./checkpoints', help='models are saved here')
         parser.add_argument('--suffix', default='', type=str, help='customized suffix: opt.name = opt.name + suffix: e.g., {model}_{which_model_netG}_size{loadSize}')
         self.initialized = True
         return parser
@@ -77,7 +76,7 @@ class BaseOptions():
         opt = self.gather_options()
         opt.isTrain = self.isTrain
 
-        opt.expr_name = opt.dataset + '_' + opt.model + '_' + str(opt.dens)
+        opt.expr_name = opt.dataset + '_' + opt.model
         # process opt.suffix
         if opt.suffix:
             suffix = ('_' + opt.suffix.format(**vars(opt))) if opt.suffix != '' else ''

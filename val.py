@@ -68,6 +68,7 @@ if __name__ == '__main__':
     a3     = np.zeros(num_samples, np.float32)
     a4     = np.zeros(num_samples, np.float32)    
     for ind, data in enumerate(data_loader):
+        print(ind)
         model.set_input(data)        
         model.test()
 
