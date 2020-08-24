@@ -5,8 +5,8 @@ from PIL import Image
 from options.test_options import TestOptions
 from data import create_dataloader
 from models import create_model
-from utils_.util import SaveResults
-from utils_ import dataset_util, util
+import util
+from util import SaveResults
 
 def ToFalseColors(depth, mask=None):
     color_map = np.array([[0,0,0,114],[0,0,1,185],[1,0,0,114],[1,0,1,174],
@@ -83,7 +83,7 @@ if __name__ == '__main__':
         mask = (gt_depth > 0) & (gt_depth<=100)
         
         mae[ind], rmse[ind], imae[ind], irmse[ind], a1[ind], \
-            a2[ind], a3[ind], a4[ind] = dataset_util.compute_errors(gt_depth[mask], pred_depth[mask])
+            a2[ind], a3[ind], a4[ind] = util.compute_errors(gt_depth[mask], pred_depth[mask])
         
         if opt.save:
             gt_depth = gt_depth[96:,:]            
