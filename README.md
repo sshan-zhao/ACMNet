@@ -41,14 +41,6 @@ run
 bash run_eval.sh
 ```
 Note that, currently we only release the pretrained model with 32 channels.
-## Citation
-If you use this code for your research, please cite our paper.
-```
-@article{zhao_acmnet,
-  title={Adaptive context-aware multi-modal network for depth completion},
-  author={Zhao, Shanshan and Gong, Mingming and Fu, Huan and Tao, Dacheng}
-}
-```
 
 ## Contact
 Shanshan Zhao: szha4333@uni.sydney.edu.au or sshan.zhao00@gmail.com
