@@ -6,7 +6,6 @@ from options.test_options import TestOptions
 from data import create_dataloader
 from models import create_model
 import util
-from util import SaveResults
 
 def ToFalseColors(depth, mask=None):
     color_map = np.array([[0,0,0,114],[0,0,1,185],[1,0,0,114],[1,0,1,174],

@@ -3,7 +3,6 @@ import time
 import numpy as np
 from PIL import Image
 import os
-from torchvision.transforms import ToPILImage
 import cv2
 
 def compute_errors(ground_truth, prediction):
@@ -15,7 +14,7 @@ def compute_errors(ground_truth, prediction):
     a3 = (threshold < 1.25**3 ).mean()
 
     # mm  
-    # MSE
+    # RMSE
     rmse = (ground_truth * 1000 - prediction * 1000) ** 2
     rmse = np.sqrt(rmse.mean())
     
@@ -24,16 +23,12 @@ def compute_errors(ground_truth, prediction):
     mae = mae.mean()
 
     # 1/km
-    # iMSE
+    # iRMSE
     irmse = (1000 / ground_truth - 1000 / prediction) ** 2
     irmse = np.sqrt(irmse.mean())
     
     # iMAE
     imae = np.fabs(1000 / ground_truth - 1000 / prediction)
-
-    #print(prediction.min())
-    #print(ground_truth.min())
-    #print(imae.max())
     imae = imae.mean()
     rel = (np.fabs(ground_truth - prediction) / ground_truth).mean()
 
