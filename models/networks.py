@@ -90,7 +90,12 @@ def gen_3dpoints(depth, K, levels=3, knn=[9], nsamples=[10000]):
         s_p3d[:,:,0:2] = s_p3d[:,:,0:2] * s_pts[:,:,2:]
 
         # knn
-        nnidx = knn_operation(s_p3d, s_p3d, knn[i-1])
+        #nnidx = knn_operation(s_p3d, s_p3d, knn[i-1])
+        r=torch.sum(s_p3d*s_p3d, dim=2, keepdim=True)
+        m=torch.matmul(s_p3d, s_p3d.transpose(2,1))
+        d = r-2*m + r.transpose(2,1)
+        _, nnidx=torch.topk(d, k=6, dim=-1, largest=False)
+        nnidx = nnidx.int()
 
         spoints.append(s_p3d.permute(0, 2, 1))
         sidxs.append(s_idx)
