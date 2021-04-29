@@ -1,7 +1,7 @@
 # ACMNet
 This the Pytorch implementation of our work on depth completion.
 
-**S. Zhao, M. Gong, H. Fu and D. Tao. Adaptive Context-Aware Multi-Modal Network for Depth Completion. (IEEE Trans. Image Process, ACCEPTED) [PAPER](https://arxiv.org/pdf/2008.10833.pdf)**
+**S. Zhao, M. Gong, H. Fu and D. Tao. Adaptive Context-Aware Multi-Modal Network for Depth Completion. (IEEE Trans. Image Process., ACCEPTED) [PAPER](https://arxiv.org/pdf/2008.10833.pdf)**
 
 
 ## Environment
