@@ -1,7 +1,7 @@
 # ACMNet
-This the Pytorch implementation of our work on depth completion.
+This is the Pytorch implementation of our work on depth completion.
 
-**S. Zhao, M. Gong, H. Fu and D. Tao. Adaptive Context-Aware Multi-Modal Network for Depth Completion. (IEEE Trans. Image Process., ACCEPTED) [PAPER](https://arxiv.org/pdf/2008.10833.pdf)**
+**S. Zhao, M. Gong, H. Fu and D. Tao. Adaptive Context-Aware Multi-Modal Network for Depth Completion. (IEEE Trans. Image Process., ACCEPTED) [Arxiv](https://arxiv.org/pdf/2008.10833.pdf) [IEEE](https://ieeexplore.ieee.org/abstract/document/9440471/)**
 
 
 ## Environment
@@ -33,14 +33,26 @@ datasets
 ```
 
 ## Training 
-We will release the training code and pretrained models before July.
+run
+```
+bash run_train.sh
+```
 
 ## Test
 run
 ```
-bash run_eval.sh
+bash run_eval.sh (sval.txt for selected_validation, val for validation) or bash run_test.sh (for submission)
 ```
-Note that, currently we only release the pretrained model with 32 channels.
 
+## Citation
+```
+@article{zhao2021adaptive,
+  title={Adaptive context-aware multi-modal network for depth completion},
+  author={Zhao, Shanshan and Gong, Mingming and Fu, Huan and Tao, Dacheng},
+  journal={IEEE Transactions on Image Processing},
+  year={2021},
+  publisher={IEEE}
+}
+```
 ## Contact
 Shanshan Zhao: szha4333@uni.sydney.edu.au or sshan.zhao00@gmail.com
