@@ -17,10 +17,10 @@ class TESTModel(BaseModel):
         
         self.visual_names = ['sparse', 'pred', 'img']
         
-        self.model_names = ['G']
+        self.model_names = ['DC']
   
-        self.netG = networks.DCOMPNet(channels=opt.channels, knn=opt.knn, nsamples=opt.nsamples, scale=opt.scale)
-        self.netG = networks.init_net(self.netG, init_type=opt.init_type, init_gain=opt.init_gain, gpu_ids=opt.gpu_ids, need_init=False)
+        self.netDC = networks.DCOMPNet(channels=opt.channels, knn=opt.knn, nsamples=opt.nsamples, scale=opt.scale)
+        self.netDC = networks.init_net(self.netDC, init_type=opt.init_type, init_gain=opt.init_gain, gpu_ids=opt.gpu_ids, need_init=False)
             
     def set_input(self, input):
 
@@ -38,7 +38,7 @@ class TESTModel(BaseModel):
         self.img = self.img[:, :, c:, :]
         
         with torch.no_grad():
-            out = self.netG(self.sparse, self.img, self.K)
+            out = self.netDC(self.sparse, self.img, self.K)
             self.pred = out[0]
          
         if c != 0:
