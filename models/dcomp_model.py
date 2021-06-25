@@ -2,7 +2,6 @@ import torch
 import itertools
 from .base_model import BaseModel
 from . import networks
-from utils_ import dataset_util
 import torch.nn.functional as F
 
 class DCOMPModel(BaseModel):
@@ -45,6 +44,7 @@ class DCOMPModel(BaseModel):
             # define loss functions
            
             self.criterionRecon = torch.nn.MSELoss()
+            self.criterionSmooth = networks.SmoothLoss()
             
             self.optimizers = []
             self.optimizer = torch.optim.Adam(itertools.chain(self.netDC.parameters()),
@@ -86,7 +86,7 @@ class DCOMPModel(BaseModel):
             self.gt = self.gt.narrow(0,0,n)
             self.K = self.K.narrow(0,0,n)
 
-        out = self.netG(self.sparse, self.img, self.K)
+        out = self.netDC(self.sparse, self.img, self.K)
         self.pred = out[0]
         self.pred_d = out[1]
         self.pred_r = out[2]

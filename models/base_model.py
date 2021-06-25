@@ -148,7 +148,7 @@ class BaseModel():
 
         state_dict = torch.load(model_path, map_location=str(self.device))
         del state_dict._metadata
-        net = self.netG
+        net = self.netDC
         if isinstance(net, torch.nn.DataParallel):
             net = net.module
         net.load_state_dict(state_dict)

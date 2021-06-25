@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from torch.optim import lr_scheduler
 from torch.nn import init, Parameter
 import torch.nn.functional as F
 from torch.nn import DataParallel
@@ -148,6 +149,37 @@ def gen_3dpoints(depth, K, levels=3, knn=[9], nsamples=[10000]):
 ##############################################################################
 # Classes
 ##############################################################################
+class SmoothLoss(nn.Module):
+    def __init__(self):
+        super(SmoothLoss, self).__init__()
+
+    
+    def forward(self, depth, image):
+        def gradient_x(img):
+            gx = img[:,:,:-1,:] - img[:,:,1:,:]
+            return gx
+
+        def gradient_y(img):
+            gy = img[:,:,:,:-1] - img[:,:,:,1:]
+            return gy
+
+        depth_grad_x = gradient_x(depth)
+        depth_grad_y = gradient_y(depth)
+        image_grad_x = gradient_x(image)
+        image_grad_y = gradient_y(image)
+
+        weights_x = torch.exp(-torch.mean(torch.abs(image_grad_x),1,True))
+        weights_y = torch.exp(-torch.mean(torch.abs(image_grad_y),1,True))
+        smoothness_x = depth_grad_x*weights_x
+        smoothness_y = depth_grad_y*weights_y
+
+        loss_x = torch.mean(torch.abs(smoothness_x))
+        loss_y = torch.mean(torch.abs(smoothness_y))
+
+        loss = loss_x + loss_y
+        
+        return loss
+
 class MLP(nn.Module):
     def __init__(self, in_channels):
         super(MLP, self).__init__()

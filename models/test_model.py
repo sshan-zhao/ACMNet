@@ -42,12 +42,14 @@ class TESTModel(BaseModel):
             # this operation might be helpful to reduce the error greatly.
             input_s = torch.cat([self.sparse, self.sparse.flip(3)], 0)
             input_i = torch.cat([self.img, self.img.flip(3)], 0)
+            input_K = torch.cat([self.K, self.K], 0)
         else:
             input_s = self.sparse
             input_i = self.img
+            input_K = self.K
         
         with torch.no_grad():
-            out = self.netDC(self.sparse, self.img, self.K)
+            out = self.netDC(input_s, input_i, input_K)
             self.pred = out[0]
 
         if self.opt.flip_input:

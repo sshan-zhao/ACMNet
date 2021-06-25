@@ -3,8 +3,7 @@ import torch.nn
 from options.train_options import TrainOptions
 from data import create_dataloader
 from models import create_model
-from utils_.util import SaveResults
-from utils_ import dataset_util, util
+from util import SaveResults
 import numpy as np
 import cv2
 
