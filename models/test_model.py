@@ -36,11 +36,24 @@ class TESTModel(BaseModel):
         sparse = self.sparse
         self.sparse = self.sparse[:, :, c:, :]
         self.img = self.img[:, :, c:, :]
+
+        if self.opt.flip_input:
+            # according to https://github.com/kakaxi314/GuideNet,
+            # this operation might be helpful to reduce the error greatly.
+            input_s = torch.cat([self.sparse, self.sparse.flip(3)], 0)
+            input_i = torch.cat([self.img, self.img.flip(3)], 0)
+        else:
+            input_s = self.sparse
+            input_i = self.img
         
         with torch.no_grad():
             out = self.netDC(self.sparse, self.img, self.K)
             self.pred = out[0]
-         
+
+        if self.opt.flip_input:
+            b = self.pred.shape[0]
+            self.pred = (self.pred[:b//2] + self.pred[b//2:].flip(3)) / 2
+
         if c != 0:
             pred = torch.zeros_like(sparse)
             pred[:, :, :c, :] = self.pred[0:1, :, 0:1, :]

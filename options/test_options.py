@@ -8,6 +8,7 @@ class TestOptions(BaseOptions):
         parser.add_argument('--model_path', type=str, default='', help='the path of the model file')
         parser.add_argument('--which_epoch', type=str, default='', help='which epoch to load? set to latest to use latest cached model')
         parser.add_argument('--save', action='store_true', help='save results')
-
+        parser.add_argument('--flip_input', action='store_true', default=False)
+        
         self.isTrain = False
         return parser
